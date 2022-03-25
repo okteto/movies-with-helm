@@ -19,7 +19,7 @@ jobs:
       - name: Build
         uses: okteto/build@main
         with:
-          file: ./okteto/build.yml
+          file: .okteto/build.yml
           global: true
         env:
           OKTETO_GIT_COMMIT: ${{ github.sha }}
