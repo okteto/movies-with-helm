@@ -1,8 +1,0 @@
-name: movies-with-helm
-build:
-  api:
-    context: api
-    dockerfile: api/Dockerfile
-  frontend:
-    context: frontend
-    dockerfile: frontend/Dockerfile

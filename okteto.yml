@@ -1,0 +1,24 @@
+name: movies-with-helm
+build:
+  api:
+    context: api
+    dockerfile: api/Dockerfile
+  frontend:
+    context: frontend
+    dockerfile: frontend/Dockerfile
+
+deploy:
+  - helm upgrade --install movies-with-helm chart --set api.image=${OKTETO_BUILD_API_IMAGE} --set frontend.image=${OKTETO_BUILD_FRONTEND_IMAGE}
+
+dev:
+  api:
+    command: ["bash"]
+    forward:
+      - 8080:8080
+      - 9229:9229
+    sync:
+      - api:/usr/src/app
+  frontend:
+    command: yarn start
+    sync:
+      - frontend:/usr/src/app
