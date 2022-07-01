@@ -1,0 +1,22 @@
+build:
+  api:
+    context: api
+  frontend:
+    context: frontend
+
+deploy:
+  - helm upgrade --install movies chart  --set api.image=${OKTETO_BUILD_API_IMAGE} --set frontend.image=${OKTETO_BUILD_FRONTEND_IMAGE}
+
+dev:
+  api:
+    command: bash
+    sync:
+      - api:/src
+    forward:
+      - 9229:9229
+
+  frontend:
+    image: okteto/node:14
+    command: bash
+    sync:
+      - frontend:/usr/src/app
