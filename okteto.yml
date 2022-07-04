@@ -9,7 +9,7 @@ deploy:
 
 dev:
   api:
-    command: bash
+    command: yarn start
     sync:
       - api:/src
     forward:
