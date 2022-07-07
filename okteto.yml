@@ -1,3 +1,5 @@
+icon: https://apps.okteto.com/movies/icon.png
+
 build:
   api:
     context: api
@@ -5,7 +7,9 @@ build:
     context: frontend
 
 deploy:
-  - helm upgrade --install movies chart  --set api.image=${OKTETO_BUILD_API_IMAGE} --set frontend.image=${OKTETO_BUILD_FRONTEND_IMAGE}
+  - helm upgrade --install movies chart
+    --set api.image=${OKTETO_BUILD_API_IMAGE}
+    --set frontend.image=${OKTETO_BUILD_FRONTEND_IMAGE}
 
 dev:
   api:
