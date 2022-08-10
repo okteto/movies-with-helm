@@ -3,10 +3,10 @@ const mongo = require("mongodb").MongoClient;
 
 const app = express();
 
-const url = `mongodb://${process.env.MONGODB_USERNAME}:${encodeURIComponent(process.env.MONGODB_PASSWORD)}@${process.env.MONGODB_HOST}:27017/${process.env.MONGODB_DATABASE}`;
+const url = `mongodb+srv://arsh4:ZJaOi0K2vYXvlw4F@cluster0.fojd8ak.mongodb.net/?retryWrites=true&w=majority`;
 
 function startWithRetry() {
-  mongo.connect(url, { 
+  mongo.connect(url, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     connectTimeoutMS: 1000,
@@ -28,8 +28,8 @@ function startWithRetry() {
 
       app.get("/api/movies", (req, res, next) => {
         console.log(`GET /api/movies`)
-        db.collection('movies').find().toArray( (err, results) =>{
-          if (err){
+        db.collection('movies').find().toArray((err, results) => {
+          if (err) {
             console.log(`failed to query movies: ${err}`)
             res.json([]);
             return;
@@ -38,15 +38,19 @@ function startWithRetry() {
         });
       });
 
-      app.get("/api/watching", (req, res, next) => {
-        console.log(`GET /api/watching`)
-        db.collection('movies').find().toArray( (err, results) =>{
-          if (err){
-            console.log(`failed to query watching: ${err}`)
+      app.get("/api/search", (req, res, next) => {
+        const query = req.query.q;
+        console.log(`GET /api/movies`)
+        const agg = [
+          { $search: { autocomplete: { query: query, path: "original_title" } } },
+          { $limit: 20 },
+        ];
+        db.collection('movies').aggregate(agg).toArray((err, results) => {
+          if (err) {
+            console.log(`failed to query movies: ${err}`)
             res.json([]);
             return;
           }
-
           res.json(results);
         });
       });
