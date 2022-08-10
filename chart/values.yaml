@@ -2,3 +2,6 @@ api:
   replicaCount: 1
   image: okteto.dev/movies-with-helm-api:okteto
 
+mongodb:
+  connection: okteto
+

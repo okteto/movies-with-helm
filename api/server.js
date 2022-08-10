@@ -3,7 +3,7 @@ const mongo = require("mongodb").MongoClient;
 
 const app = express();
 
-const url = `mongodb+srv://arsh4:ZJaOi0K2vYXvlw4F@cluster0.fojd8ak.mongodb.net/?retryWrites=true&w=majority`;
+const url = `${process.env.MONGODB_CONNECTION_STRING}`;
 
 function startWithRetry() {
   mongo.connect(url, {

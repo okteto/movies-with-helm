@@ -6,7 +6,7 @@ build:
 
 deploy:
   - name: Deploy Application
-    command: helm upgrade --install movies chart --set api.image=${OKTETO_BUILD_API_IMAGE}
+    command: helm upgrade --install movies chart --set api.image=${OKTETO_BUILD_API_IMAGE} --set mongodb.connection=${MONGODB_CONNECTION_STRING}
   - name: Create MongoDB Atlas Search Index
     command: ./create-search-index.sh
 

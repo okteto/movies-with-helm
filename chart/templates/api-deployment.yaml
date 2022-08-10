@@ -21,12 +21,18 @@ spec:
       initContainers:
         - name: load-data
           image: {{ .Values.api.image }}
+          env:
+          - name: MONGODB_CONNECTION_STRING
+            value: {{ .Values.mongodb.connection }}
           command:
             - yarn
             - load
       containers:
         - name: api
           image: {{ .Values.api.image }}
+          env:
+          - name: MONGODB_CONNECTION_STRING
+            value: {{ .Values.mongodb.connection }}
           ports:
             - name: http
               containerPort: 8080
