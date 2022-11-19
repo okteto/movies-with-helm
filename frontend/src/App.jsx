@@ -82,7 +82,10 @@ class App extends Component {
           </div>
         </header>
         <Hero />
-        <TitleList title="Movies" titles={movies.data} loaded={movies.loaded} />
+        <TitleList 
+          title={`New movies to watch for ${session.name}`}
+          titles={movies.data} 
+          loaded={movies.loaded} />
         <TitleList
           title={`Continue watching for ${session.name}`}
           titles={watching.data}
