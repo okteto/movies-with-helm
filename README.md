@@ -37,3 +37,7 @@ The file to change can be found in [frontend/src/App.jsx](frontend/src/App.jsx) 
 
 You will realize nothing has changed. This is due to the fact, that only the backend is currently observed and automatically deployed, not the frontend.
 Therefore we open a second terminal window and run `okteto up` again. Choose frontend now and wait for it to get it pulled and deployed.
+
+# Adding testing
+To ensure we are not accidently reintroducing the bug in the backend which showed the same movies for watched and available to watch, we want to add an automated test to prevent regression to sneak up on us.
+
