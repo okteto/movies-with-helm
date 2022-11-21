@@ -1,0 +1,21 @@
+{
+  "name": "movies-with-helm",
+  "version": "1.0.0",
+  "description": "This example shows how to leverage [Okteto](https://github.com/okteto/okteto) to develop a Node.js + React Sample App directly in Kubernetes. The Node + React Sample App is deployed using a [Helm Chart](https://github.com/okteto/movies/tree/main/chart). It creates the following components:",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sussdorff/movies-with-helm.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sussdorff/movies-with-helm/issues"
+  },
+  "homepage": "https://github.com/sussdorff/movies-with-helm#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.28.0"
+  }
+}

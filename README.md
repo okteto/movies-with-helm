@@ -40,4 +40,25 @@ Therefore we open a second terminal window and run `okteto up` again. Choose fro
 
 # Adding testing
 To ensure we are not accidently reintroducing the bug in the backend which showed the same movies for watched and available to watch, we want to add an automated test to prevent regression to sneak up on us.
+In order to do this we are going to leverage playwright right here in our codespaces environment.
+
+Hit the F1 key to access the command pallet and then enter "Install Playwright". This will install playwright for you to use and create a bunch of folders. Just use the default checkboxes when asked.
+
+Try out tests are running with `npx playwright test`. This will run all tests which are found in the "tests" folder. Currently this is one simple test, executed across three browser engines. 
+
+## One browser engine 
+As this is somewhat time consuming, for our development sessions we might only want to run it using chromium `npx playwright test --project=chromium`. Yet, as we are lazy and know for today, chromium is the only thing we want to verify on, let's change this generally in the playwright.config.ts
+
+ACTION: Uncomment the other two browsers and verify you are only running one test.
+
+## List reports
+If you try to run npx playwright show-report you will realize that playwright can't open the localhost to display the report. This is due to the fact, that we running the coding environment not on your local machine but in the cloud. There are options around this, but there is a talk on playwright Thursday, so attend that workshop and ask how (and hopefully get an anwer ;-) ).
+
+For our needs we will have the reports generate with a list. `npx playwright test --reporter=list` is your friend.
+
+ACTION: Configure this in playwright.config.ts for general use. 
+
+
+
+
 
