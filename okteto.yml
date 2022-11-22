@@ -21,6 +21,6 @@ dev:
 
   frontend:
     image: okteto/node:14
-    command: bash
+    command: yarn install && yarn start
     sync:
       - frontend:/usr/src/app
