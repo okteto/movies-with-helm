@@ -105,3 +105,8 @@ dist
 /test-results/
 /playwright-report/
 /playwright/.cache/
+package-lock.json
+package.json
+playwright*
+/tests-examples/
+example.spec.ts
