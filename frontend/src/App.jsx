@@ -21,7 +21,7 @@ class App extends Component {
       session: {
         name: 'Cindy',
         lastName: 'Lopez',
-        username: 'cindy',
+        username: 'tere',
         avatar: userAvatarImage
       },
       fixHeader: false
@@ -75,7 +75,7 @@ class App extends Component {
             <div className="logo">Movies</div>
             <ul className="menu">
               <li className="selected">Home</li>
-              <li>Movies</li>
+              <li>My Movies</li>
               <li>My List</li>
             </ul>
             <UserProfile user={session} />
