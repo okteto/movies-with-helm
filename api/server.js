@@ -53,6 +53,10 @@ function startWithRetry() {
 
       console.log("Server running on port 8080.");
     });
+
+    app.get("/api", (req, res, next) => {
+      res.sendStatus(418);
+    });
   });
 };
 
