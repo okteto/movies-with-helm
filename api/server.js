@@ -51,6 +51,19 @@ function startWithRetry() {
         });
       });
 
+      app.get("/api/envar", (req, res, next) => {
+        console.log(`GET /api/envar`)
+        let envar = process.env.SOME_VAR
+        console.log(envar);
+        console.log("Displayed envar already")
+        res.send(envar);
+      });
+      
+      app.get("/api/luke", (req, res, next) => {
+        console.log(`GET /api/luke`)
+        res.send("I am your father!");
+      });
+
       console.log("Server running on port 8080.");
     });
   });
