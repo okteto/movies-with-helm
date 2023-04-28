@@ -4,7 +4,7 @@ build:
   api:
     context: api
     args:
-      SOME_VAR: $SOME_VAR
+      SOME_VAR:
   frontend:
     context: frontend
 
