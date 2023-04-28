@@ -1,8 +1,12 @@
-icon: https://apps.okteto.com/movies/icon.png
+icon: https://images.vexels.com/media/users/3/185202/isolated/preview/04210f166dee214fc751791106b453b2-donut-pink-syrup-icon.png
 
 build:
   api:
     context: api
+    args:
+      SOME_VAR: $SOME_VAR
+    secrets:
+      SOME_VAR: $SOME_VAR
   frontend:
     context: frontend
 
