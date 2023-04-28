@@ -4,9 +4,9 @@ build:
   api:
     context: api
     args:
-      SOME_VAR: $SOME_VAR
+      SOME_VAR: ${SOME_VAR}
     secrets:
-      SOME_VAR: $SOME_VAR
+      SOME_VAR: ${SOME_VAR}
   frontend:
     context: frontend
 
