@@ -8,6 +8,15 @@ It creates the following components:
 - A very simple Node.js API using [Express](https://expressjs.com).
 - A [MongoDB](https://www.mongodb.com) database.
 
+## Run the Movies App in Okteto
+
+```
+$ git clone https://github.com/okteto/movies-with-helm
+$ cd movies-with-helm
+$ git checkout hybrid
+$ okteto deploy
+```
+
 ## Hybrid Mode
 
 Hybrid mode means the microservice you are actively developing is running locally in your machine, and the rest of the application is running in the remote cluster.
@@ -23,9 +32,7 @@ It's worth noting that your local process inherits the original deployment envir
 
 A typical use case for using `hybrid` development mode is when your application build is significantly slower on the remote dev container, such as when using Webpack where this becomes very noticeable compared to your local environment.
 
-:::info
-Keep in mind that using `hybrid` mode may break replicability between Operating Systems (local and remote) and add latency when accessing other services in the cluster.
-:::
+**Note**: keep in mind that using `hybrid` mode may break replicability between Operating Systems (local and remote) and add latency when accessing other services in the cluster.
 
 ### How to use Hybrid Mode
 
