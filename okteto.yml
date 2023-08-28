@@ -4,6 +4,13 @@ deploy:
   - helm upgrade --install movies chart
 
 dev:
+  frontend:
+    mode: hybrid
+    workdir: frontend
+    command: bash
+    reverse:
+      - 80:80
+
   api:
     command: yarn start
     sync:
@@ -11,8 +18,3 @@ dev:
     forward:
       - 9229:9229
 
-  frontend:
-    image: okteto/node:14
-    command: bash
-    sync:
-      - frontend:/usr/src/app
