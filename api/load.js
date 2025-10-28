@@ -1,56 +1,49 @@
-const mongo = require("mongodb").MongoClient;
+const { MongoClient } = require("mongodb");
 
-const url = `mongodb://${process.env.MONGODB_USERNAME}:${encodeURIComponent(process.env.MONGODB_PASSWORD)}@${process.env.MONGODB_HOST}:27017/${process.env.MONGODB_DATABASE}`;
+const url = `mongodb://${process.env.MONGODB_USERNAME}:${encodeURIComponent(process.env.MONGODB_PASSWORD)}@${process.env.MONGODB_HOST}:27017/admin`;
 
-var insert = function(collection, data, resolve, reject) {
-  const d = require(data);
-  d.results.forEach((doc) => {
+async function insertData(collection, dataFile) {
+  const data = require(dataFile);
+  data.results.forEach((doc) => {
     doc._id = doc.id;
   });
-  collection.insertMany(d.results, (err, r) => {
-    if (err) {
-      if (err.code != 11000) {
-        return reject(err);
-      }
+  
+  try {
+    await collection.insertMany(data.results);
+    console.log(`Inserted ${data.results.length} documents from ${dataFile}`);
+  } catch (err) {
+    if (err.code !== 11000) { // Ignore duplicate key errors
+      throw err;
     }
-
-    resolve();
-  });
+    console.log(`Some documents from ${dataFile} already exist, skipping duplicates`);
+  }
 }
 
-function loadWithRetry() {
-  mongo.connect(url, { 
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    connectTimeoutMS: 300,
-    socketTimeoutMS: 300,
-  }, (err, client) => {
-    if (err) {
-      console.error(`Error connecting, retrying in 300 msec: ${err}`);
-      setTimeout(loadWithRetry, 300);
-      return;
-    }
-
-    var promises = [];
-    db = client.db(process.env.MONGODB_DATABASE);
-    promises.push(new Promise((resolve, reject)=>{
-      insert(db.collection('movies'), "./data/movies.json", resolve, reject);
-    }));
-  
-    promises.push(new Promise((resolve, reject)=>{
-      insert(db.collection('watching'), "./data/watching.json", resolve, reject);
-    }));
-  
-    Promise.all(promises)
-    .then(function() { 
-      console.log('all loaded'); 
-      process.exit(0);
-    })
-    .catch((err) => {
-      console.error(`fail to load: ${err}`);
-      process.exit(1);
-    });      
-  });
-};
+async function loadWithRetry() {
+  try {
+    const client = new MongoClient(url, { 
+      connectTimeoutMS: 5000,
+      socketTimeoutMS: 5000,
+    });
+    
+    await client.connect();
+    console.log("Connected to MongoDB successfully");
+    
+    const db = client.db(process.env.MONGODB_DATABASE);
+    
+    await Promise.all([
+      insertData(db.collection('movies'), "./data/movies.json"),
+      insertData(db.collection('watching'), "./data/watching.json")
+    ]);
+    
+    console.log('All data loaded successfully');
+    await client.close();
+    process.exit(0);
+    
+  } catch (err) {
+    console.error(`Error connecting, retrying in 300 msec: ${err}`);
+    setTimeout(loadWithRetry, 300);
+  }
+}
 
 loadWithRetry();

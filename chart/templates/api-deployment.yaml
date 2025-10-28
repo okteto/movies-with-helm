@@ -29,9 +29,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: mongodb
-                  key: mongodb-password
+                  key: mongodb-root-password
             - name: MONGODB_USERNAME
-              value: okteto
+              value: root
             - name: MONGODB_DATABASE
               value: okteto
             - name: MONGODB_HOST
@@ -44,9 +44,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: mongodb
-                  key: mongodb-password
+                  key: mongodb-root-password
             - name: MONGODB_USERNAME
-              value: okteto
+              value: root
             - name: MONGODB_DATABASE
               value: okteto
             - name: MONGODB_HOST

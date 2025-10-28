@@ -1,10 +1,10 @@
 api:
   replicaCount: 1
-  image: okteto/movies-with-helm:api
+  image: ${OKTETO_BUILD_API_IMAGE}
 
 frontend:
   replicaCount: 1
-  image: okteto/movies-with-helm:frontend
+  image: ${OKTETO_BUILD_FRONTEND_IMAGE}
 
 mongodb:
   password: "Password!1@2"
