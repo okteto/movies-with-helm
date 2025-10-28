@@ -1,14 +1,7 @@
 icon: https://apps.okteto.com/movies/icon.png
 
-build:
-  api:
-    context: api
-  frontend:
-    context: frontend
-
 deploy:
-  - envsubst < chart/values.yaml > chart/values-processed.yaml
-  - helm upgrade --install movies chart -f chart/values-processed.yaml
+  - helm upgrade --install movies chart
 
 dev:
   api:
