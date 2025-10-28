@@ -1,0 +1,56 @@
+name: Build and Push Images
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'api/**'
+      - 'frontend/**'
+      - '.github/workflows/**'
+
+env:
+  OKTETO_TOKEN: ${{ secrets.OKTETO_TOKEN }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Okteto CLI
+      uses: okteto/setup@latest
+      with:
+        token: ${{ secrets.OKTETO_TOKEN }}
+
+    - name: Build and push API image
+      run: |
+        echo "🚀 Building API image..."
+        cd api
+        okteto build -t okteto/movies-with-helm:api -t okteto/movies-with-helm:api-${{ github.sha }} .
+        echo "✅ API image build completed"
+
+    - name: Build and push Frontend image
+      run: |
+        echo "🚀 Building Frontend image..."
+        cd frontend  
+        okteto build -t okteto/movies-with-helm:frontend -t okteto/movies-with-helm:frontend-${{ github.sha }} .
+        echo "✅ Frontend image build completed"
+
+    - name: Validate images
+      run: |
+        echo "🔍 Validating built images..."
+        okteto registry list | grep "okteto/movies-with-helm:api"
+        okteto registry list | grep "okteto/movies-with-helm:frontend"
+        echo "✅ Images validated successfully"
+
+    - name: Summary
+      if: success()
+      run: |
+        echo "🎉 Build and push completed successfully!"
+        echo "📦 Built images:"
+        echo "  - okteto/movies-with-helm:api"
+        echo "  - okteto/movies-with-helm:api-${{ github.sha }}"
+        echo "  - okteto/movies-with-helm:frontend"  
+        echo "  - okteto/movies-with-helm:frontend-${{ github.sha }}"

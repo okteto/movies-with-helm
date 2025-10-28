@@ -1,0 +1,57 @@
+name: PR Build Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'api/**'
+      - 'frontend/**'
+      - '.github/workflows/**'
+
+env:
+  OKTETO_TOKEN: ${{ secrets.OKTETO_TOKEN }}
+
+jobs:
+  validate-builds:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Okteto CLI
+      uses: okteto/setup@latest
+      with:
+        token: ${{ secrets.OKTETO_TOKEN }}
+
+    - name: Build API image (validation)
+      run: |
+        echo "🔍 Validating API Docker build..."
+        cd api
+        okteto build -t okteto/movies-with-helm:pr-api-${{ github.event.number }} .
+        echo "✅ API build validation passed"
+
+    - name: Build Frontend image (validation)
+      run: |
+        echo "🔍 Validating Frontend Docker build..."
+        cd frontend  
+        okteto build -t okteto/movies-with-helm:pr-frontend-${{ github.event.number }} .
+        echo "✅ Frontend build validation passed"
+
+    - name: Cleanup PR images
+      if: always()
+      continue-on-error: true
+      run: |
+        echo "🧹 Cleaning up PR validation images..."
+        okteto registry delete okteto/movies-with-helm:pr-api-${{ github.event.number }} || true
+        okteto registry delete okteto/movies-with-helm:pr-frontend-${{ github.event.number }} || true
+        echo "✅ Cleanup completed"
+
+    - name: PR Build Summary
+      run: |
+        echo "🎉 PR build validation completed successfully!"
+        echo "📋 Validated components:"
+        echo "  - ✅ API Docker build"
+        echo "  - ✅ Frontend Docker build"
+        echo ""
+        echo "Ready for merge to main branch 🚀"
