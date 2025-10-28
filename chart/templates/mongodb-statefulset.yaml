@@ -18,45 +18,34 @@ spec:
         app.kubernetes.io/name: mongodb
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-      securityContext:
-        fsGroup: 1001      
-      initContainers:
       containers:
       - name: mongodb
-        image: docker.io/bitnami/mongodb:5.0
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 1001
+        image: mongo:7.0.14
         env:
-        - name: MONGODB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mongodb
-              key: mongodb-password
-        - name: MONGODB_ROOT_PASSWORD
+        - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mongodb
               key: mongodb-root-password
-        - name: MONGODB_USERNAME
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: "root"
+        - name: MONGO_INITDB_DATABASE
           value: "okteto"
-        - name: MONGODB_SYSTEM_LOG_VERBOSITY
-          value: "0"
-        - name: MONGODB_DISABLE_SYSTEM_LOG
-          value: "no"
-        - name: MONGODB_DATABASE
-          value: "okteto"
-        - name: MONGODB_ENABLE_IPV6
-          value: "no"
-        - name: MONGODB_ENABLE_DIRECTORY_PER_DB
-          value: "no"
         ports:
         - name: mongodb
           containerPort: 27017
         volumeMounts:
         - name: data
-          mountPath: /bitnami/mongodb
+          mountPath: /data/db
           subPath: 
+        readinessProbe:
+          exec:
+            command:
+            - mongosh
+            - --eval
+            - db.adminCommand('ping')
+          initialDelaySeconds: 5
+          periodSeconds: 30
         resources:
           {}
       volumes:

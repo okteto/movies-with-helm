@@ -1,4 +1,4 @@
-FROM node:14 as dev
+FROM node:18-alpine AS dev
 
 WORKDIR /src
 

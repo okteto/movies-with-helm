@@ -21,6 +21,7 @@ spec:
       initContainers:
         - name: load-data
           image: {{ .Values.api.image }}
+          imagePullPolicy: Always
           command:
             - yarn
             - load
@@ -29,9 +30,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: mongodb
-                  key: mongodb-password
+                  key: mongodb-root-password
             - name: MONGODB_USERNAME
-              value: okteto
+              value: root
             - name: MONGODB_DATABASE
               value: okteto
             - name: MONGODB_HOST
@@ -39,14 +40,15 @@ spec:
       containers:
         - name: api
           image: {{ .Values.api.image }}
+          imagePullPolicy: Always
           env:
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mongodb
-                  key: mongodb-password
+                  key: mongodb-root-password
             - name: MONGODB_USERNAME
-              value: okteto
+              value: root
             - name: MONGODB_DATABASE
               value: okteto
             - name: MONGODB_HOST

@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:18-alpine
 
 # setup okteto message
 COPY bashrc /root/.bashrc
