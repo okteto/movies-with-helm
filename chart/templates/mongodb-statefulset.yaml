@@ -20,8 +20,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:5.0
-        args: ["--bind_ip_all"]
+        image: mongo:7.0.14
         env:
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
@@ -39,6 +38,14 @@ spec:
         - name: data
           mountPath: /data/db
           subPath: 
+        readinessProbe:
+          exec:
+            command:
+            - mongosh
+            - --eval
+            - db.adminCommand('ping')
+          initialDelaySeconds: 5
+          periodSeconds: 30
         resources:
           {}
       volumes:

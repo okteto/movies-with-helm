@@ -21,6 +21,7 @@ spec:
       initContainers:
         - name: load-data
           image: {{ .Values.api.image }}
+          imagePullPolicy: Always
           command:
             - yarn
             - load
@@ -39,6 +40,7 @@ spec:
       containers:
         - name: api
           image: {{ .Values.api.image }}
+          imagePullPolicy: Always
           env:
             - name: MONGODB_PASSWORD
               valueFrom:
