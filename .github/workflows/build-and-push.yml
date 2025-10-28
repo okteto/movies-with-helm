@@ -24,26 +24,36 @@ jobs:
       with:
         token: ${{ secrets.OKTETO_TOKEN }}
 
+    - name: Login to Okteto Registry
+      run: okteto registry login
+
     - name: Build and push API image
       run: |
-        echo "🚀 Building API image..."
+        echo "🚀 Building and pushing API image..."
         cd api
-        okteto build -t okteto/movies-with-helm:api -t okteto/movies-with-helm:api-${{ github.sha }} .
-        echo "✅ API image build completed"
+        docker build -t okteto/movies-with-helm:api .
+        docker tag okteto/movies-with-helm:api okteto/movies-with-helm:api-${{ github.sha }}
+        docker push okteto/movies-with-helm:api
+        docker push okteto/movies-with-helm:api-${{ github.sha }}
+        echo "✅ API image build and push completed"
 
     - name: Build and push Frontend image
       run: |
-        echo "🚀 Building Frontend image..."
+        echo "🚀 Building and pushing Frontend image..."
         cd frontend  
-        okteto build -t okteto/movies-with-helm:frontend -t okteto/movies-with-helm:frontend-${{ github.sha }} .
-        echo "✅ Frontend image build completed"
+        docker build -t okteto/movies-with-helm:frontend .
+        docker tag okteto/movies-with-helm:frontend okteto/movies-with-helm:frontend-${{ github.sha }}
+        docker push okteto/movies-with-helm:frontend
+        docker push okteto/movies-with-helm:frontend-${{ github.sha }}
+        echo "✅ Frontend image build and push completed"
 
     - name: Validate images
       run: |
-        echo "🔍 Validating built images..."
-        okteto registry list | grep "okteto/movies-with-helm:api"
-        okteto registry list | grep "okteto/movies-with-helm:frontend"
-        echo "✅ Images validated successfully"
+        echo "🔍 Validating pushed images..."
+        # Verify images were pushed successfully by checking if they can be pulled
+        docker pull okteto/movies-with-helm:api || (echo "❌ API image validation failed" && exit 1)
+        docker pull okteto/movies-with-helm:frontend || (echo "❌ Frontend image validation failed" && exit 1)
+        echo "✅ Images validated successfully - both images can be pulled from registry"
 
     - name: Summary
       if: success()

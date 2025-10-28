@@ -8,13 +8,14 @@ The `build-and-push.yml` workflow automatically builds and pushes Docker images 
 
 ### What it does:
 
-1. **Triggers**: Runs on every push to `main` branch and on pull requests
-2. **Builds**: Creates Docker images for both API and Frontend components
-3. **Tags**: Creates both latest tags and commit-specific tags:
+1. **Triggers**: Runs on every push to `main` branch (separate PR validation workflow)
+2. **Authenticates**: Logs into Okteto registry using the provided token
+3. **Builds**: Creates Docker images for both API and Frontend components using standard `docker build`
+4. **Tags**: Creates both latest tags and commit-specific tags:
    - `okteto/movies-with-helm:api` and `okteto/movies-with-helm:api-{commit-sha}`
    - `okteto/movies-with-helm:frontend` and `okteto/movies-with-helm:frontend-{commit-sha}`
-4. **Pushes**: Automatically pushes images to the Okteto registry
-5. **Validates**: Confirms images are available in the registry (main branch only)
+5. **Pushes**: Automatically pushes images to the Okteto registry  
+6. **Validates**: Confirms images can be pulled from registry after push
 
 ### Setup Requirements:
 

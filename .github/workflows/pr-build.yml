@@ -28,24 +28,15 @@ jobs:
       run: |
         echo "🔍 Validating API Docker build..."
         cd api
-        okteto build -t okteto/movies-with-helm:pr-api-${{ github.event.number }} .
-        echo "✅ API build validation passed"
+        okteto build .
+        echo "✅ API build validation passed (local build only)"
 
     - name: Build Frontend image (validation)
       run: |
         echo "🔍 Validating Frontend Docker build..."
         cd frontend  
-        okteto build -t okteto/movies-with-helm:pr-frontend-${{ github.event.number }} .
-        echo "✅ Frontend build validation passed"
-
-    - name: Cleanup PR images
-      if: always()
-      continue-on-error: true
-      run: |
-        echo "🧹 Cleaning up PR validation images..."
-        okteto registry delete okteto/movies-with-helm:pr-api-${{ github.event.number }} || true
-        okteto registry delete okteto/movies-with-helm:pr-frontend-${{ github.event.number }} || true
-        echo "✅ Cleanup completed"
+        okteto build .
+        echo "✅ Frontend build validation passed (local build only)"
 
     - name: PR Build Summary
       run: |
